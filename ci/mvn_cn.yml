@@ -1,0 +1,30 @@
+---
+
+resource:
+  - name: code
+    type: git
+    source: 
+      uri: 
+      branch: master
+
+jobs:
+  - name: compile
+    plan:
+      - get: code
+        trigger: true
+      - task: compile-code
+        config:
+          platform: linux
+          image_resource: 
+            type: docker-image
+            source: 
+              repository: maven
+          inputs: 
+            - name: code
+          run:
+            path: mvn
+            args:
+              - clean
+              - compile
+              - -f
+              - code/pom.xml
